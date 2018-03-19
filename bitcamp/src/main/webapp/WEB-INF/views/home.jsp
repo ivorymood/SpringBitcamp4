@@ -29,6 +29,6 @@ $('#btn').on('click', function(){
 app.init('${ctx}');
 <%-- alert('<%=request.getContextPath()%>'); --%>
 });
-
+//
 
 </script>
