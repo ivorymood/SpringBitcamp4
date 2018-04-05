@@ -1,0 +1,48 @@
+@charset "UTF-8";
+
+.tab-algo-fiveByFive{
+	width: 100%; border: 1px solid black; margin: 0 auto
+}
+.tab-algo-fiveByFive tr{
+	border: 1px solid black; margin: 0 auto
+}
+.tab-algo-fiveByFive tr th{
+	text-align: center;
+}
+.tab-algo-fiveByFive tbody tr td{
+	border: 1px solid black; margin: 0 auto
+}
+
+/* login-style */
+.login-container{
+	width:100%; height: 500px; border: 2px solid red;
+}
+.login-content{
+	width: 50%; height: 300px; border: 2px solid blue; margin: 100px auto;
+}
+
+/* magnific popup */
+.white-popup {
+  position: relative;
+  background: #FFF;
+  padding: 20px;
+  width: auto;
+  max-width: 500px;
+  margin: 20px auto;
+}
+
+/*popup*/
+.popup{
+	position: relative;
+	background: #FFF; 
+	padding: 20px;
+	width: auto;
+	max-width: 500px;
+	margin: 20px auto;
+}
+.board-writing{
+	width: 80%;
+	margin : 0 auto;
+}
+
+

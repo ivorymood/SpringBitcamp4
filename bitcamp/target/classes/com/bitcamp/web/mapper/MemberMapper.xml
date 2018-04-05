@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bitcamp.web.mapper.Mapper">
+ 	<resultMap type="java.util.HashMap" id="map">
+ 		<id property="id" column="id"/>
+ 		<result property="id" column="id"/>
+ 		<result property="pass" column="pass"/>
+ 		<result property="adminId" column="admin_id"/>
+ 		<result property="adminPass" column="admin_pass"/>
+ 	</resultMap>
+ 	<resultMap type="com.bitcamp.web.domain.Member" id="member">
+ 		<id property="id" column="id"/>
+ 		<result property="pass" column="pass"/>
+ 		<result property="name" column="name"/>
+ 		<result property="ssn" column="ssn"/>
+ 		<result property="phone" column="phone"/>
+ 		<result property="email" column="email"/>
+ 		<result property="profile" column="profile"/>
+ 		<result property="addr" column="addr"/>
+ 	</resultMap>
+ 	<resultMap type="com.bitcamp.web.domain.Admin" id="admin">
+ 		<id property="adminId" column="admin_id"/>
+ 		<result property="adminPass" column="admin_pass"/>
+ 	</resultMap>
+ 	<resultMap type="com.bitcamp.web.domain.Board" id="board">
+ 		<id property="bbsSeq" column="bbs_seq"/>
+ 		<result property="title" column="title"/>
+ 		<result property="content" column="content"/>
+ 		<result property="regdate" column="regdate"/>
+ 		<result property="id" column="id"/>
+ 	</resultMap>
+ 	<insert id="insertMember" parameterType="com.bitcamp.web.domain.Command">
+	INSERT INTO Member VALUES (#{member.id}, #{member.pass}, #{member.name}, 
+	<choose>
+		<when test="member.ssn == null">
+			''
+		</when>
+		<otherwise>
+			#{member.ssn}
+		</otherwise>
+	</choose>,
+	<choose>
+		<when test="member.phone == null">
+			''
+		</when>
+		<otherwise>
+			#{member.phone}
+		</otherwise>
+	</choose>,
+	<choose>
+		<when test="member.email == null">
+			''
+		</when>
+		<otherwise>
+			#{member.email}
+		</otherwise>
+	</choose>,
+	<choose>
+		<when test="member.profile == null">
+			''
+		</when>
+		<otherwise>
+			#{member.profile}
+		</otherwise>
+	</choose>,
+	<choose>
+		<when test="member.addr == null">
+			''
+		</when>
+		<otherwise>
+			#{member.addr}
+		</otherwise>
+	</choose>)
+	
+	</insert>
+ 	<select id="searchMemberById" resultMap="member" parameterType="hashMap">	<!-- param: hashMap만 쓰면 ㅇㅋ -->
+	    SELECT * 
+	    FROM ${type} 
+	    WHERE id LIKE #{id}    <!-- #{data}든 #{val}든 상관X -->
+ 	</select>
+ 	<select id="searchAdminById" resultMap="admin" parameterType="hashMap">
+ 		SELECT * 
+	    FROM ${type} 
+	    WHERE admin_id LIKE #{id}
+ 	</select>
+ 	 	<select id="exist" 
+ 	resultType="int"
+ 	parameterType="com.bitcamp.web.domain.Command">
+	 	SELECT count(*) 
+	 	FROM ${type} 
+	 	WHERE ${col1} LIKE #{data1} 
+	 	AND ${col2} LIKE #{data2}
+ 	</select>
+ 	
+ 	<select id="articles"
+ 	resultMap="board"
+ 	parameterType="com.bitcamp.web.domain.Command">
+select a.*
+from 
+	(select
+		@rownum := @rownum +1 As rownum, t.*
+	from(select bbs_seq AS bbsSeq, title, content, regdate, id
+		from board
+		order by bbsSeq desc) t,
+		(select @rownum:=0) tmp)  a
+where rownum between #{data1} and #{data2}
+ 	</select>
+ 	<insert id="insertArticle" parameterType="hashMap">
+ 		insert into board(title, content, id)
+ 		values(#{title}, #{content}, #{id})
+ 	</insert>
+ 	<select id="selectCount" resultType="int" parameterType="com.bitcamp.web.domain.Command">
+	 	select count(*)
+	 	from ${type}
+ 	</select>
+ 	
+ 	<delete id="deleteMember" parameterType="com.bitcamp.web.domain.Command">
+ 	
+ 	</delete>
+ 	
+ 	<insert id="addImage" parameterType="com.bitcamp.web.domain.Image">
+		 INSERT INTO Image
+		 VALUES (#{ImageID},#{filename},#{extension},now())
+	 </insert>
+ 
+	 <select id="selectAdmin" parameterType="com.bitcamp.web.domain.Command"
+	 resultMap="admin">
+		 select admin_id AS adminId, admin_pass AS adminPass
+		 from Admin
+		 where ${col1} like #{data1}
+		 AND ${col2} LIKE #{data2}
+	 </select>
+ 	<update id="updateMember" parameterType="hashMap">
+ 		update ${type}
+ 		<set>
+ 			<if test="name != null">
+ 				name = #{pass},
+ 			</if>
+ 			<if test="pass != null">
+ 				pass = #{pass},
+ 			</if>
+ 			<if test="phone != null">
+ 				phone = #{phone},
+ 			</if>
+ 			<if test="email != null">
+ 				email = #{email},
+ 			</if>
+ 			<if test="profile != null">
+ 				profile = #{profile},
+ 			</if>
+ 			<if test="addr != null">
+ 				addr = #{addr}
+ 			</if>
+ 		</set>
+ 		where ${column} = #{data}
+ 	</update>
+ 	<select id="selectByKeyword" parameterType="hashMap" resultMap="member">
+ 		select * 
+ 		from ${type}
+ 		where
+ 			<if test="name != null">
+ 				name = #{data}
+ 			</if>
+ 			<if test="ssn != null">
+ 				ssn = #{data}
+ 			</if>
+ 			<if test="phone != null">
+ 				phone = #{data}
+ 			</if>
+ 			<if test="email != null">
+ 				email = #{data}
+ 			</if>
+ 			<if test="profile != null">
+ 				profile = #{data}
+ 			</if>
+ 			<if test="addr != null">
+ 				addr = #{data}
+ 			</if>
+ 	</select>
+ 	<select id="searchAll" parameterType="hashMap" resultMap="map">
+ 		select * 
+ 		from ${type}
+ 		where ${column} like #{word}
+ 	</select>
+</mapper>
