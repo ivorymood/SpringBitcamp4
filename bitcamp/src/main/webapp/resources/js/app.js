@@ -424,7 +424,7 @@ app.member=(()=>{	//이 자체가 클래스이자 인스턴스
 			.attr('style','border: 1px solid #ddd;');
 			$('#mypage_tab>td')
 			.attr('style','border: 1px solid #ddd;');
-			
+			//dkfjksdf
 			/*$('#td_1_1')
 			.attr("colspan",2)
 			.attr("rowspan",2);
